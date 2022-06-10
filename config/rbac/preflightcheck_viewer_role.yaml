@@ -1,0 +1,20 @@
+# permissions for end users to view preflightchecks.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: preflightcheck-viewer-role
+rules:
+- apiGroups:
+  - tools.opdev.io
+  resources:
+  - preflightchecks
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - tools.opdev.io
+  resources:
+  - preflightchecks/status
+  verbs:
+  - get

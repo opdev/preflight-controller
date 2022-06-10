@@ -1,0 +1,131 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.8.0
+  creationTimestamp: null
+  name: preflightchecks.tools.opdev.io
+spec:
+  group: tools.opdev.io
+  names:
+    kind: PreflightCheck
+    listKind: PreflightCheckList
+    plural: preflightchecks
+    singular: preflightcheck
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.image
+      name: Image
+      type: string
+    - jsonPath: .status.type
+      name: Type
+      type: string
+    - jsonPath: .status.completed
+      name: Successful
+      type: boolean
+    - jsonPath: .status.jobs[0]
+      name: Job
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: PreflightCheck is the Schema for the preflightchecks API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: PreflightCheckSpec defines the desired state of PreflightCheck
+            properties:
+              checkOptions:
+                maxProperties: 1
+                properties:
+                  containerOptions:
+                    properties:
+                      certificationProjectID:
+                        type: string
+                      pyxisAPITokenSecretRef:
+                        type: string
+                    type: object
+                  operatorOptions:
+                    properties:
+                      deploymentChannel:
+                        type: string
+                      indexImage:
+                        type: string
+                      kubeconfigSecretRef:
+                        type: string
+                      scorecardNamespace:
+                        type: string
+                      scorecardServiceAccount:
+                        type: string
+                      scorecardWaitTime:
+                        type: string
+                    required:
+                    - indexImage
+                    - kubeconfigSecretRef
+                    type: object
+                type: object
+              dockerConfigSecretRef:
+                description: DockerConfigSecretRef is a secret containing a key config.json
+                  with a dockerconfig.json as its contents.
+                type: string
+              foo:
+                description: Foo is an example field of PreflightCheck. Edit preflightcheck_types.go
+                  to remove/update
+                type: string
+              image:
+                description: Image is the container image to run preflight against.
+                type: string
+              logLevel:
+                description: LogLevel represents the preflight log level.
+                enum:
+                - Info
+                - Warn
+                - Debug
+                - Trace
+                type: string
+              preflightImage:
+                description: PreflightImage overrides the default preflight stable
+                  container image.
+                type: string
+            required:
+            - checkOptions
+            - image
+            type: object
+          status:
+            description: PreflightCheckStatus defines the observed state of PreflightCheck
+            properties:
+              completed:
+                type: boolean
+              jobs:
+                items:
+                  type: string
+                type: array
+              type:
+                type: string
+            required:
+            - completed
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

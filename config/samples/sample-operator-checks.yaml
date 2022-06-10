@@ -1,0 +1,10 @@
+apiVersion: tools.opdev.io/v1alpha1
+kind: PreflightCheck
+metadata:
+  name: sample-operator-checks
+spec:
+  image: "quay.io/opdev/simple-demo-operator:0.0.6"
+  checkOptions :
+    operatorOptions:
+      indexImage: "quay.io/opdev/simple-demo-operator-catalog:v0.0.6"
+      kubeconfigSecretRef: "mykubeconfig"

@@ -1,0 +1,10 @@
+apiVersion: tools.opdev.io/v1alpha1
+kind: PreflightCheck
+metadata:
+  name: sample-with-cert-proj-id
+spec:
+  image: "quay.io/opdev/simple-demo-operator:0.0.6"
+  type: "container"
+  checkOptions :
+    containerOptions:
+      certificationProjectID: "1234567890123"

@@ -1,0 +1,9 @@
+apiVersion: tools.opdev.io/v1alpha1
+kind: PreflightCheck
+metadata:
+  name: sample-custom-pflt-img
+spec:
+  image: "quay.io/opdev/simple-demo-operator:0.0.6"
+  preflightImage: "quay.io/opdev/preflight:1.2.1"
+  checkOptions :
+    containerOptions: {}

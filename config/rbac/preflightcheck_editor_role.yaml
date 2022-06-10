@@ -1,0 +1,24 @@
+# permissions for end users to edit preflightchecks.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: preflightcheck-editor-role
+rules:
+- apiGroups:
+  - tools.opdev.io
+  resources:
+  - preflightchecks
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - tools.opdev.io
+  resources:
+  - preflightchecks/status
+  verbs:
+  - get

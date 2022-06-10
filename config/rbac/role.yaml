@@ -1,0 +1,47 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - batch
+  resources:
+  - jobs
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - batch
+  resources:
+  - jobs/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - tools.opdev.io
+  resources:
+  - preflightchecks
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - tools.opdev.io
+  resources:
+  - preflightchecks/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - tools.opdev.io
+  resources:
+  - preflightchecks/status
+  verbs:
+  - get
+  - patch
+  - update
