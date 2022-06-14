@@ -28,6 +28,7 @@ type PreflightCheckJobReconciler struct {
 // Reconcile will ensure that the Kubernetes Job for PreflightCheck
 // reaches the desired state.
 func (r *PreflightCheckJobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+	metricReconciliationsStarted.Inc()
 	l := log.FromContext(ctx).WithName("job-reconciler")
 	l.Info("job reconciliation initiated.")
 	defer l.Info("job reconciliation complete.")
@@ -38,10 +39,12 @@ func (r *PreflightCheckJobReconciler) Reconcile(ctx context.Context, req ctrl.Re
 	err := r.Client.Get(ctx, instanceKey, &instance)
 
 	if apierrors.IsNotFound(err) {
+		metricReconciliationsCompleted.Inc()
 		return subrec.Evaluate(subrec.DoNotRequeue())
 	}
 
 	if err != nil {
+		metricReconciliationsErrored.Inc()
 		return subrec.Evaluate(subrec.RequeueWithError(err))
 	}
 
@@ -49,6 +52,7 @@ func (r *PreflightCheckJobReconciler) Reconcile(ctx context.Context, req ctrl.Re
 
 	err = ctrl.SetControllerReference(&instance, &new, r.Scheme)
 	if err != nil {
+		metricReconciliationsErrored.Inc()
 		return subrec.Evaluate(subrec.RequeueWithError(err))
 	}
 
@@ -68,10 +72,12 @@ func (r *PreflightCheckJobReconciler) Reconcile(ctx context.Context, req ctrl.Re
 		// create the resource because it does not exist.
 		l.Info("creating resource", new.Kind, new.Name)
 		if err := r.Client.Create(ctx, &new); err != nil {
+			metricReconciliationsErrored.Inc()
 			return subrec.Evaluate(subrec.RequeueWithError(err))
 		}
 
 		if err != nil {
+			metricReconciliationsErrored.Inc()
 			return subrec.Evaluate(subrec.RequeueWithError(err))
 		}
 	}
@@ -86,6 +92,7 @@ func (r *PreflightCheckJobReconciler) Reconcile(ctx context.Context, req ctrl.Re
 	// 	return subrec.Evaluate(subrec.RequeueWithError(err))
 	// }
 
+	metricReconciliationsCompleted.Inc()
 	return subrec.Evaluate(subrec.DoNotRequeue()) // success
 }
 
