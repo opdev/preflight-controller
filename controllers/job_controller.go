@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"encoding/json"
 
 	toolsv1alpha1 "github.com/opdev/preflight-controller/api/v1alpha1"
 	subrec "github.com/opdev/subreconciler"
@@ -69,6 +70,9 @@ func (r *PreflightCheckJobReconciler) Reconcile(ctx context.Context, req ctrl.Re
 
 	// if apierrors.IsNotFound(err) {
 	if len(existing.Items) == 0 {
+		// render the job out to logs
+		newAsJSON, _ := json.Marshal(new)
+		l.Info("printing generated job", "json", string(newAsJSON))
 		// create the resource because it does not exist.
 		l.Info("creating resource", new.Kind, new.Name)
 		if err := r.Client.Create(ctx, &new); err != nil {
