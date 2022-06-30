@@ -23,22 +23,17 @@ import (
 
 // PreflightCheckSpec defines the desired state of PreflightCheck
 type PreflightCheckSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
-	// Foo is an example field of PreflightCheck. Edit preflightcheck_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
-
 	// Image is the container image to run preflight against.
 	Image string `json:"image"`
 
 	// LogLevel represents the preflight log level.
 	// +kubebuilder:validation:Enum=Info;Warn;Debug;Trace
-	LogLevel *string `json:"logLevel,omitempty"`
+	LogLevel string `json:"logLevel,omitempty"`
 
 	// DockerConfigSecretRef is a secret containing a key config.json with a dockerconfig.json
 	// as its contents.
-	DockerConfigSecretRef *string `json:"dockerConfigSecretRef,omitempty"`
+	// +kubebuilder:validation:MinLength:=1
+	DockerConfigSecretRef string `json:"dockerConfigSecretRef,omitempty"`
 
 	// PreflightImage overrides the default preflight stable container image.
 	PreflightImage *string `json:"preflightImage,omitempty"`
@@ -54,7 +49,8 @@ type CheckOptions struct {
 
 type ContainerOptions struct {
 	CertificationProjectID *string `json:"certificationProjectID,omitempty"`
-	PyxisAPITokenSecretRef *string `json:"pyxisAPITokenSecretRef,omitempty"`
+	// +kubebuilder:validation:MinLength:=1
+	PyxisAPITokenSecretRef string `json:"pyxisAPITokenSecretRef,omitempty"`
 }
 
 type OperatorOptions struct {
