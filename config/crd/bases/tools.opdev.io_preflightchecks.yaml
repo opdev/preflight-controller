@@ -56,6 +56,7 @@ spec:
                       certificationProjectID:
                         type: string
                       pyxisAPITokenSecretRef:
+                        minLength: 1
                         type: string
                     type: object
                   operatorOptions:
@@ -80,10 +81,7 @@ spec:
               dockerConfigSecretRef:
                 description: DockerConfigSecretRef is a secret containing a key config.json
                   with a dockerconfig.json as its contents.
-                type: string
-              foo:
-                description: Foo is an example field of PreflightCheck. Edit preflightcheck_types.go
-                  to remove/update
+                minLength: 1
                 type: string
               image:
                 description: Image is the container image to run preflight against.
